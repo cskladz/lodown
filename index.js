@@ -3,12 +3,74 @@
 // YOU KNOW WHAT TO DO //
 
 /**
+* 
+* identity: Designed to returned whatever value is passed in unchanged.
+* 
+* @param {...} anything: any value that is a value.
+* 
+* @return {...} anything: any value input will be return unaltered.
+* 
+* Usage:
+*       var input = [1,2,3];
+*       console.log(identity(input)); // -> [1,2,3]
+* 
+* 
+*/
+function identity (anything) {return anything}; 
+
+/** 
+* 
+* typeOf: Designed to return the datatype of a given value as a string.
+
+* 
+* @param {... } anything: any type of expression or value.
+* 
+* @return {String}:       
+*          - "string"
+*          - "array"
+*          - "object"
+*          - "undefined"
+*          - "number"
+*          - "boolean"
+*          - "null"
+*          - "function"* 
+* 
+* Usage :
+*  console.log(typeOf(134)); //  -> "number"
+*  console.log(typeOf("javascript")); // -> "string"
+*  console.log(typeOf([1,2,3])); //  -> "array"
+*/
+function typeOf (anything) {
+    
+    if(Array.isArray(anything)) return "array";
+    if(anything === null) return "null";
+    else return typeof anything;
+    
+}
+/**
  * each: Designed to loop over a collection, Array or Object, and applies the 
- * action Function to each value in the collection.
+ * action Function to each value in the collection. Each is an impure function 
+ * and therefore doesnt return anything and can only produce side effects. 
+ * Each doesnt produce a new value, but it can be used to alter elements in
+ * an array or key/value pairs in an object.
+ * Each can also be used to 'dive' into complex objects, every time each is run
+ * we can see one-layer deeper into our object.
  * 
  * @param {Array or Object} collection: The collection over which to iterate.
  * @param {Function} action: The Function to be applied to each value in the 
  * collection
+ * 
+ * Usage:
+ *      var input = [1,2,3];
+ *      var result =[];
+ *      each(input, (e,i)=>{
+ *          input[i] = input[i]*2;
+ *          result.push(e*2);
+        });
+ *      console.log(result); // -> [2,4,6]
+ *      console.log(input);  // -> [2,4,6]
+ * 
+ *      
  */
 function each(collection, action) {
     if(Array.isArray(collection)) {
@@ -21,16 +83,26 @@ function each(collection, action) {
         }
     }
 }
+
 /**
  * first: Designed to return a new array containing the first of a specified 
  * amount of elements in an array.
- *      
+ *
  * @param {Array} array: The array over which to iterate.
  * @param {Number} num: The number of indexes, including and starting at 
  * zero, that will be returned. If left empty the function will return
  * the first element of the array.
  * 
- * If an array is not given and empty array will be returned.
+ * @return {Array}: will return a new array with a length equal to the lesser 
+ * of the second argument and the length of the given array. If an array is 
+ * not given an empty array will be returned.
+ * 
+ * Usage:
+ * 
+ *      var input =[1,2,3,4];
+ *      var result = first(input, 2);
+ *      console.log(result); // -> [1,2]
+ * 
 */
 function first (array, num) {
     if(!(Array.isArray(array))) return [];
@@ -46,7 +118,6 @@ function first (array, num) {
 }
 
 /** 
- * 
  * last: Designed to return a new array containing the last of a specified
  * amount of elements in an array.
  * 
@@ -55,7 +126,17 @@ function first (array, num) {
  * of the array that will be returned. If left empty the function will return
  * the last element of the array.
  * 
- * If an array is not given and empty array will be returned.
+ * @return {Array}: will return a new array with a length equal to the lesser 
+ * of the second parameter and the length of the given array. If an array 
+ * is not given an empty array will be returned. the last element in the 
+ * returned array will be equal to the last element in the given array. 
+ * 
+ * Usage:
+ * 
+ *      var input =[1,2,3,4];
+ *      var result = last(input, 2);
+ *      console.log(result); // -> [3,4]  
+ * 
 */
 function last (array, num) {
     //console.log(array.reverse());
@@ -70,16 +151,24 @@ function last (array, num) {
         return result;
     }
 }
-
 /** 
  * 
  * indexOf: Designed to return the index of the first occurance of a given
  * value. or -1 if the value is not contained within any of the elements
- * in the array. 
+ * in the array.
  * 
  * @param{Array} array: The array over which to iterate.
- * @param{Value} value: The value with whcih to seach the array for. 
-*
+ * @param{Value} value: The value with whcih to seach the array for.
+ * 
+ * @return{Number}: will return a number represented the index, or -1 if
+ * the given value is not found in the array.
+ * 
+ * Usage:
+ * 
+ *      var input =['a','b','c','d'];
+ *      var result = indexOf(input, 'c');
+ *      console.log(result); // -> 2
+ * 
 */
 function indexOf (array, value) {
    for (var i = 0; i < array.length; i++){
@@ -92,12 +181,22 @@ function indexOf (array, value) {
  * 
  * filter: Designed to iterate through and array and return a new array
  * containing all the elements which returned true from calling function.
- * 
+ *
  * @param {Array} array: the array over which to iterate.
  * @param {Function} action: The function to apply to each element
  * in the array. action is looking for a Boolean expression from the
- * passed in function. *Make sure action returns a Boolean*  
+ * passed in function. *Make sure action returns a Boolean*
+ * 
+ * @return {Array}: will return a new array consiting of elements for which the
+ * calling function returned true for. 
+ * 
+ * Usage: 
+ * 
+       var input = [1,2,3,4];
+       var result = filter(input, (e => e%2 !== 0));
+       console.log(result); // -> [1,3]
 */
+
 
 
 
@@ -111,14 +210,24 @@ function filter (array, action) {
 
 /**
  * 
- * reject: Designed to iterate through and array and return a new array
+ * reject:Designed to iterate through and array and return a new array
  * containing all the elements which returned false from calling function.
- * 
+ *
  * @param {Array} array: the array over which to iterate.
  * @param {Function} action: The function to apply to each element
- * in the array. <action> is looking for a Boolean expression from the
- * passed in function. *Make sure action returns a Boolean*  
+ * in the array. action is looking for a Boolean expression from the
+ * passed in function. *Make sure action returns a Boolean*
+ * 
+ * @return {Array}: will return a new array consiting of elements for which the
+ * calling function returned false for. 
+ * 
+ * Usage: 
+ * 
+ *      var input = [1,2,3,4];
+ *      var result = reject(input, (e => e%2 !== 0));
+ *      console.log(result); // -> [2,4]
 */
+
 function reject (array, action) {
     var result = [];
     filter(array, ( (element, index, collection) => { 
@@ -126,19 +235,28 @@ function reject (array, action) {
         } )  );
     return result;
 }
-console.log(reject([1,2,3,4], (e) => {return e%2 === 1}));
+
+
 /**
- * 
- * partition: Designed to take an array and return a new array 
- * that contains two subarrays.
- * Inside one of these sub-arrays are all the elements which returned true
- * from the passed in function. And in the other sub-array are all the 
- * element which returned false from the passed in function.
- * 
+* 
+* partition: Designed to take an array and return a new array 
+* that contains two subarrays.
+* 
 * @param {Array} array: The array or collection over which to iterate.
 * @param {Function} action: The function that will be passed agaisnt all the
 * elements in the given array or collection. The passed in function must return
-* a Boolean value or it will not work. 
+* a Boolean value or it will not work.
+* 
+* @return: {Array} Inside one of these sub-arrays are all the elements which 
+* returned true from the passed in function. And in the other sub-array are
+* all the elements which returned false from the passed in function.
+* 
+* 
+* Usage:
+* 
+*      var input = [1,2,3,4];
+*      var result = partition(input, (e => e%2 !== 0));
+*      console.log(result); // -> [[1,2],[2,4]];  
 * 
 */
 function partition (array, action) {
@@ -146,30 +264,27 @@ function partition (array, action) {
     each(array, ( (element, key, collection) => {
         if(action(element, key, collection)) result[0].push(element);
         else if(!(action(element, key, collection))) result[1].push(element);        
-        //else return "What the hell am I doing here?? I must not be Boolean\n";
         }));
     return result;
 }
 
-/** _.unique()
-* Arguments:
-*   1) An array
-* Objectives:
-*   1) Return a new array of all elements from <array> with duplicates removed
-*   2) Use _.indexOf() from above
-* Examples:
-*   _.unique([1,2,2,4,5,6,5,2]) -> [1,2,4,5,6]
+
+/** 
+* 
+* unique: Designed to take an array and return a new array with only unique 
+* values. Removes duplicate values from an array. 
+* 
+* @param {Array} an array: the array you wish to have without duplicates.
+* 
+* @return {Array}: This function uses indexOf to push items into the returned
+* array that do not already exist in the array to be returned.
+* 
+* Usage:
+* 
+*       console.log(unique([1,2,2,4,5,6,5,2])); // -> [1,2,4,5,6]
 */
 
-//apply indexOf as the function to pass into .each....
-//use indexOf 
 
-//if match
-    //splice?....
-    //indexOf requires an array and a value. to do what?? to find duplicates matching arrays
-        //want to use the <resolved expression of _.each> as the value parameter in indexOf
-            //need to make an action to pass into .each that acts as a function which will return the value of th element in given array
-    //splice out returned indexes from indexOf;
 function unique (array) {
     var result = [];
     for(var i =0; i<array.length; i++){
@@ -180,20 +295,22 @@ function unique (array) {
     return result;
 }
 
-/** _.map()
-* Arguments:
-*   1) A collection
-*   2) a function
-* Objectives:
-*   1) call <function> for each element in <collection> passing the arguments:
-*        if <collection> is an array:
-*            the element, it's index, <collection>
-*        if <collection> is an object:
-*            the value, it's key, <collection>
-*   2) save the return value of each <function> call in a new array
-*   3) return the new array
-* Examples:
-*   _.map([1,2,3,4], function(e){return e * 2}) -> [2,4,6,8]
+/**
+*
+* map: Designed to take a collection and return a new array containing the 
+* result of the given function over applied to each one of the elements/values. 
+* 
+* @param: {Object or Array} collection: the collection or array in wish you
+* wish to iterate over. 
+* @param {Function} action: the action you wish to perform all on the 
+* elements/values in the given collection.
+* 
+* @return {Array}: Will return a new array with a length equal in length of 
+* given array. 
+*
+* Usage: 
+* 
+*   console.log(map([1,2,3,4], e=>{return e * 2})); -> [2,4,6,8]
 */
 function map  (collection, action) {
     var result =[];
@@ -202,15 +319,26 @@ function map  (collection, action) {
     });        
     return result;
 } 
-/** _.pluck()
-* Arguments:
-*   1) An array of objects
-*   2) A property
-* Objectives:
-*   1) Return an array containing the value of <property> for every element in <array>
-*   2) You must use _.map() in your implementation.
-* Examples:
-*   _.pluck([{a: "one"}, {a: "two"}], "a") -> ["one", "two"]
+/**
+* 
+* pluck: Designed to iterate over an array of objects and return a new array 
+*  of values which are attached to a specific and given key. 
+*
+* @param {An array of objects} array: An array containing the objects you wish
+* to search through the values for a specific key.*Must be an array of objects.*
+* @param {String (property name)} property: The name of the property you wish 
+* to pull values from in across an array of objects.*This value must be the 
+* name of the property as a string.*
+*
+* @return {Array}: It returns an array containing all the values in the
+* an array that are associated with the given key.
+* 
+* Usage:
+* 
+*   var arrayOfObjects =[{key1: 'value1'},{key1: 'value2'},{key1: 'value3'}]; 
+*   var result = pluck(arrayOfObjects, "key1");
+*   console.log(result); // -> ['value1','value2','value3']
+*   
 */
 function pluck  (array, property) {
   var result = [];
@@ -220,198 +348,156 @@ function pluck  (array, property) {
   return result;
     
 }
-/** _.contains()
-* Arguments:
-*   1) An array
-*   2) A value
-* Objectives:
-*   1) Return true if <array> contains <value>
-*   2) Return false otherwise
-*   3) You must use the ternary operator in your implementation.
-* Gotchas:
-*   1) did you use === ?
-*   2) what if no <value> is given?
-* Examples:
-*   _.contains([1,"two", 3.14], "two") -> true
+/**
+* 
+* contains: Designed to return a Boolean reflecting the existence of a given
+* value within a given array.
+* 
+* @param {Array} array: Give the array you wish to search through.
+* @param {A value} value: any value you want to check the elements of the given
+* array for.
+* 
+* @return {Boolean}: will return a Boolean value of true or false.
+* 
+* Usage:
+*   console.log(contains([1,"two", 3.14], "two")); // -> true
 * 
 */
 function contains(array, value){
     return array.includes(value) ? true : false;
 }
 
-/** _.every()
-* Arguments:
-*   1) A collection
-*   2) A function
-* Objectives:
-*   1) Call <function> for every element of <collection> with the paramaters:
-*      if <collection> is an array:
-*          current element, it's index, <collection>
-*      if <collection> is an object:
-*          current value, current key, <collection>
-*   2) If the return value of calling <function> for every element is true, return true
-*   3) If even one of them returns false, return false
-*   4) If <function> is not provided, return true if every element is truthy, otherwise return false
-* Gotchas:
-*   1) what if <function> doesn't return a boolean
-*   2) What if <function> is not given?
-* Examples:
-*   _.every([2,4,6], function(e){return e % 2 === 0}) -> true
-*   _.every([1,2,3], function(e){return e % 2 === 0}) -> false
+/**
+*  
+* every: Designed to take a function, apply it to each element or value 
+* in a collection, and return a Boolean of true if the action on every element 
+* returns true, else it will return false.    
+* 
+* @param {An Array or Object} collection: The array or object of which you wish
+* to iterate over.
+* @param {Function} action: The function that will be passed agaisnt all the
+* elements in the given array or collection. 
+* **The passed in function must return a Boolean value or it will not work.** 
+* 
+* @return{Boolean}: will return true only if all elements in the given 
+* collection resolve to true when the action passed in is applied to them.
+* If action is left empty or not a function and all elements resolve to truthy 
+* values the return will be true. If even one element resolves to false, 
+* false will be returned.
+* 
+* Usage:
+*   console.log(every([2,4,6], function(e){return e % 2 === 0})); -> true
+*   console.log(every([1,2,3], function(e){return e % 2 === 0})); -> false
 */
-function every  (collection, action) {
-  var result;
-  if(typeof action != "function" ){
-      each(collection, function(element, index, collection){
-            if((!!(element))) result =true;
-            else result = false;
-            return result;
-        });
-  }
-  else {  
-      var reject = reject(collection,action);
-    reject.length === 0 ? result = true : result = false;
-  }
- return result;
+function every(collection, action) {
+    var result =true;
+    if(!action){
+     action = identity;
+    }
+    each(collection, (e,i) => {
+        if(!action(e)) result= false;
+    });
+  return result;
 }
 
-    //else if(_.filter(collection, action)) return true;
-    //call function for every element (.each should meet both requests for iterating over an object and/or an array with said parameters)
-    //console.log(_.reject(collection, action));
-    //pass function over every element in an array or object
-    
-    //if(action(e) === true) for every iteration return true
-        //if(!action(e)) for any iteration return false. 
-        
-    //if function is not provided, run !! agaiasnt every value and return true if all true else false. 
-//   if(action === undefined){
-//       _.each(collection, function(element, index, collection){
-//             if((!!(element))) result =true;
-//             else result = false;
-//             console.log(result);
-//             return result;
-//         });
-//   }
-//   else{
-//         _.each(collection, function(element, index, collection){
-//             if(action(element)) result = true;
-//             else result = false;
-//             console.log(result);
-//             return result;
-//             //result.push(action(element));
-            
-//         });
-//   }
+/**
+* 
+* some: Designed to take a collection, apply a given function returning Boolean
+* to all elements/value in the collection, and return true if any of the 
+* elements/values resloved to true. This is the similar to <every()>, but will 
+* return true if 1 or more elements pass the test.
+* This function makes use of <filter> which returns an array of values that return
+* the same Boolean. By comparing the length of this array with the orginal array
+* we can infer if any of the elements resolved to the same Boolean expression 
+* or not.
+* 
+* @param {An Array or Object} collection: The array or object of which you wish
+* to iterate over.
+* @param {Function} action: The function that will be passed agaisnt all the
+* elements in the given array or collection. 
+* **The passed in function must return a Boolean value or it will not work.** 
+* 
+* @return {Boolean}: true if any elements return true from the function passed 
+* in. False if none of the elements return true.
 
-//run the collections through .filter and .reject and infer presence of a falsey statemtns by comparing the lengths of the returning arrays....check if returning array includes any false statements.....
-//  for example, if i send the same array and function to .filter and .reject, .filter will only fill up true values, if that returning length is less than the length of array sent to it, we can infer not all statements were true.
-//  or, similary we can send it through .reject. if it returns an empty array then return true, else, false.
-
-//     var result1;
-//     var result2;
-//     console.log(Boolean(collection.length === _.filter(collection, action).length));
-//     //console.log((_.filter(collection, function(e){return Boolean(collection[e])})));
-//     if(action === undefined && collection.length === _.filter(collection, function(e,i,a){return Boolean(e)} ).length) result1 = true;
-        
-//     // && (_.filter(collection, function(e){return Boolean(collection[e])}) === true)) return true;
-//     if(action === undefined && collection.length === _.reject(collection, action).length) result1 = false;
-//     _.each(collection, (element, index, collection) =>{
-//     if(action(element, index, collection)) result2 = true;
-//     else result2 = false;
-//     });
-//   return result1; 
-// };
-/** _.some()
-* Arguments:
-*   1) A collection
-*   2) A function
-* Objectives:
-*   1) Call <function> for every element of <collection> with the paramaters:
-*       if <collection> is an array:
-*        current element, it's index, <collection>
-*       if <collection> is an object:
-*        current value, current key, <collection>
-*   2) If the return value of calling <function> is true for at least one element, return true
-*   3) If it is false for all elements, return false
-*   4) If <function> is not provided return true if at least one element is truthy, otherwise return false
-* Gotchas:
-*   1) what if <function> doesn't return a boolean
-*   2) What if <function> is not given?
-* Examples:
-*   _.some([1,3,5], function(e){return e % 2 === 0}) -> false
-*   _.some([1,2,3], function(e){return e % 2 === 0}) -> true
+* Usage:
+*   console.log(some([1,3,5], function(e){return e % 2 === 0})) // -> false
+*   console.log(some([1,2,3], function(e){return e % 2 === 0})) // -> true
 */
 function some (collection, action) {
     var result;
-     if(typeof action != "function" ){
+    if(typeof action != "function" ){
       each(collection, function(element, index, collection){
-            if((!!(element))) result =true;
-            else result = false;
-            return result;
+        if((!!(element))) result =true;
+        else result = false;
         });
-  }
-  else{
-    var filter = filter(collection, action);
-    filter.length === 0 ? result = false : result = true;
-    return result;
-  }
-    
+    }else{
+        var filter = filter(collection, action);
+        filter.length === 0 ? result = false : result = true;
+        return result;
+    }
  return result;   
 }
 
-/** _.reduce()
-* Arguments:
-*   1) An array
-*   2) A function
-*   3) A seed
-* Objectives:
-*   1) Call <function> for every element in <collection> passing the arguments:
-*         previous result, element, index
-*   2) Use the return value of <function> as the "previous result"
-*      for the next iteration
-*   3) On the very first iteration, use <seed> as the "previous result"
-*   4) If no <seed> was given, use the first element/value of <collection> as <seed>
-*   5) After the last iteration, return the return value of the final <function> call
-* Gotchas:
-*   1) What if <seed> is not given?
-* Examples:
-*   _.reduce([1,2,3], function(previousSum, currentValue, currentIndex){ return previousSum + currentValue }, 0) -> 6
+/**
+* 
+* reduce: Designed to take a collection and return a single value based on
+* the last function call. Performs iteration through an entire array or object,
+* returning the result to be passed in again through the next iteration.
+* 
+* @param {Array} array: the collection over which you wish to iterate.
+* @param {Function} action: The function you wish to apply to the 
+* elements/values in the collection supplied in the preceeding parameter 
+* @param {*} seed: This is the starting value for the first iteration.
+* It must be also be returned within the callback function so that it 
+* can be passed in again during the next interation. The value of seed
+* after the last iteration is return.
+* "Set the Seed to what you Need" ie. use the seed to set your datatype
+* 
+* @return {*}: Will return any single value performed by the last function 
+* call. 
+*
+* Usage:
+*   console.log(reduce([1,2,3], (sum, number) => { return sum + number}, 0));
+*       // -> 6
 */
 function reduce (array, action, seed) {
 //pass the action onto every element in the collecion
-//var result1 = _.each(array, action); 
 //pass the result from the action back into the function
-  
+//(seed === undefined) ? return seed = element : return seed = action(seed, element, index) });  
 each(array, function(element,index,array){
-            if(seed === undefined /* || typeof seed === "false"*/){
-                return seed = element;
-            } 
-            else {
-                return seed = action(seed, element, index);
-        
-                }
+    (seed === undefined) ? seed = element : seed = action(seed, element, index);
     });
  return seed;   
 }
-
-/** _.extend()
-* Arguments:
-*   1) An Object
-*   2) An Object
-*   ...Possibly more objects
-* Objectives:
-*   1) Copy properties from <object 2> to <object 1>
-*   2) If more objects are passed in, copy their properties to <object 1> as well, in the order they are passed in.
-*   3) Return the update <object 1>
-* Examples:
+/** 
+* 
+* extend: Designed to copy properties from object2 into object1. It will overwrite
+* any values that share the same key name and add new key/value pairs for those that
+* exist in object2 but not in object1. additonal objects can be after after object 2
+* and will be copied into object 1 with the last argument value being the last applied.
+*
+* @param {Object} object1: This is where all properties will be copied too and returned.  
+* @param {Object} object2: This is what properties will be copied to the preceeding 
+* object argument. The properties in this object will be copied into object1.
+* @param {Object} nextObj : can pass in more objects as sources. They will all be 
+* copied to the first object argument, <object1>, in order from left to right as
+* listed in the function call parenthesis.
+* 
+* @return {Object}: Will return object 1 with its properties updated by the 
+* subsequent object arguments.
+* 
+* Usage:
 *   var data = {a:"one"};
-*   _.extend(data, {b:"two"}); -> data now equals {a:"one",b:"two"}
-*   _.extend(data, {a:"two"}); -> data now equals {a:"two"}
+*   extend(data, {b:"two"});
+*   console.log(data); //->  {a:"one",b:"two"}
+*   extend(data, {a:"two"});
+*   console.log(data); //-> {a:"two"}
 */
 
-function extend  (object1, obj2, nextObj) {
+function extend  (object1, object2, nextObj) {
     for(var key in object1) {
-        Object.assign(object1, obj2, nextObj);
+        Object.assign(object1, object2, nextObj);
     }
     return object1;
 }
@@ -432,3 +518,5 @@ module.exports.every = every;
 module.exports.some = some;
 module.exports.reduce = reduce;
 module.exports.extend = extend;
+module.exports.identity = identity;
+module.exports.typeOf = typeOf;
